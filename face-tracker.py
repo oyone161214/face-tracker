@@ -8,8 +8,17 @@ CASCADE_FILE = "/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.
 
 def main():
     # カメラをキャプチャ
-    cap = cv2.VideoCapture(CAM_ID)
-    
+    cap = cv2.VideoCapture(CAM_ID, cv2.CAP_V4L2)
+        
+    if not cap.isOpened():
+        print("not open")
+    else:
+        print("open")
+        cap.release()
+
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    cap.set(cv2.CAP_PROP_FPS, 30)    
     # Haar Cascade分類器をロード
     cascade = cv2.CascadeClassifier(CASCADE_FILE)
     

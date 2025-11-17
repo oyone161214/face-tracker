@@ -1,5 +1,4 @@
 import cv2
-from servo import move_servo, convert_angle, return_center
 
 # Specify which camera to use (0 = default, built-in, or first detected USB camera)
 CAM_ID = 0

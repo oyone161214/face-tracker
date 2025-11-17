@@ -7,9 +7,29 @@ CAM_ID = 0
 # Path to the pre-trained model file for face recognition (adjust for your environment)
 CASCADE_FILE = "/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml"
 
+def find_and_open_camera():
 
+    cap = None
+    
+    for i in range(5):
+        print(f"Attempting to open camera {i}...")
+
+        current_cap = cv2.VideoCapture(i, cv2.CAP_V4L2)
+        
+        if current_cap.isOpened():
+            print(f"✅ Camera {i} opened successfully!")
+            cap = current_cap
+            CAM_ID = i
+            break
+        else:
+            current_cap.release() 
+    
+    return cap
 
 def face_track():
+    
+    # cap = find_and_open_camera()
+
     for i in range(5):
         # Explore available cameras by changing the camera ID
         # Capture video from the selected camera
@@ -19,6 +39,10 @@ def face_track():
             print(f"Camera {i} opened")
             CAM_ID = i
             break
+            
+    if cap is None:
+        print("❌ No camera could be opened. Exiting.")
+        return
 
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
@@ -26,6 +50,11 @@ def face_track():
     # Load the Haar Cascade classifier
     cascade = cv2.CascadeClassifier(CASCADE_FILE)
     
+    if cascade.empty():
+        print(f"Error: Failed to load cascade classifier at {CASCADE_FILE}")
+        cap.release()
+        return
+
     print("Starting face recognition... (Press 'q' to quit)")
 
     while True:

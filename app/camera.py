@@ -1,5 +1,5 @@
 import cv2
-from app.servo import move_servo, convert_angle, return_center
+from servo import move_servo, convert_angle, return_center
 
 # Specify which camera to use (0 = default, built-in, or first detected USB camera)
 CAM_ID = 0
@@ -35,7 +35,7 @@ def face_track():
         # Capture video from the selected camera
         cap = cv2.VideoCapture(i, cv2.CAP_V4L2)
             
-        if not cap.isOpened():
+        if cap.isOpened():
             print(f"Camera {i} opened")
             CAM_ID = i
             break

@@ -1,4 +1,4 @@
-from app.servo import move_servo, convert_angle, return_center, servo1, servo2
+from servo import move_servo, convert_angle, return_center, servo1, servo2
 
 """test data"""
 move_bulk1 = [90, -90, 0]

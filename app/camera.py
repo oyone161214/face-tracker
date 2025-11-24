@@ -1,5 +1,4 @@
 import cv2
-from servo import move_servo, convert_angle, return_center
 
 # Specify which camera to use (0 = default, built-in, or first detected USB camera)
 CAM_ID = 0
@@ -26,7 +25,7 @@ def find_and_open_camera():
     
     return cap
 
-def face_track():
+def camera():
     
     # cap = find_and_open_camera()
 
@@ -86,4 +85,4 @@ def face_track():
     print("Face recognition ended.")
 
 if __name__ == '__main__':
-    face_track()
+    camera()

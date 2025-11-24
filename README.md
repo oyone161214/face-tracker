@@ -5,8 +5,8 @@
 ### 1. リポジトリのクローン
 
 ```bash
-git clone https://github.com/yamamoto
-cd SecondBrain-intern
+git clone https://github.com/yamamoto/face-tracker
+cd face-tracker
 ```
 
 
@@ -26,7 +26,7 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3.環境構築(pigpio)
+### 3.環境構築(pigpiod)
 ```bash
 sudo apt update
 sudo apt upgrade

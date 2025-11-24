@@ -24,7 +24,7 @@ def convert_angle(servo_type,coordinate):
         return max(-90, min(90, angle))
     elif servo_type == servo2:
         angle = coordinate // 5.33
-        return max(0, min(90, angle))
+        return max(-90, min(0, angle))
 
 def return_center(servo_type, hold_time=0.25):
     servo_type.value = 0.0

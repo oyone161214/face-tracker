@@ -17,6 +17,9 @@ move_servo2 = [240, -240, 240, -240, 0]
 
 coordinate_groop_example = [(320,240), (-320,-240), (320,240), (-320,-240)]
 
+return_center(servo1)
+return_center(servo2)
+
 """test movement"""
 # for i in move_bulk1:
 #     move_servo(servo1, i)

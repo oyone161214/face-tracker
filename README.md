@@ -35,3 +35,13 @@ which pigpiod　　（でpigpiodがあるか確認）
 sudo systemctl stop pigpiod
 sudo pigpiod
 ```
+
+### 4.インストール方法（YOLO）
+```bash
+psudo apt update
+sudo apt install python3-pip -y
+pip install -U pip
+pip install ultralytics[export]
+sudo reboot
+
+```

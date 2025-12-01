@@ -46,13 +46,17 @@ def find_and_open():
 
 # cap,cascade = find_and_open_camera()
 
-def camera(cap, cascade):
+def camera(cap, cascade, debug=False):
+
+    for _ in range(5):
+        cap.grab()
+    
 
     # Read one frame from the camera
     ret, frame = cap.read()
     if not ret:
         print("Error: Failed to read frame.")
-        raise Exception("Error")
+        raise None
     
     # (x, y)
     center = (frame.shape[1] // 2, frame.shape[0] // 2)
@@ -78,7 +82,9 @@ def camera(cap, cascade):
 
 
     # Display the result in a window
-    cv2.imshow('Face Recognition', frame)
+
+    if debug:
+        cv2.imshow('Face Recognition', frame)
 
     return move
 

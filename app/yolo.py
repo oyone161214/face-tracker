@@ -59,11 +59,36 @@ print("初回実行時は顔認識用モデル(yolov8n-face.pt)のダウンロ�
 # yolov8n-face.pt は、YOLOv8ベースの軽量な顔認識モデルです。
 model = YOLO("yolov8n-face.pt")
 
+# （前略：カメラ設定やモデル読み込みなど）
+
 try:
-    # show=True で画面表示
-    # 【変更点2 (任意)】 classes=[0] を追加して、念の為クラスID 0（顔）のみに限定します
-    # (このモデルは顔しか知らないのでなくても動きますが、明示的に指定すると確実です)
+    # 1. 予測を実行 (resultsに戻り値を受け取る)
     results = model.predict(source=found_id, show=True, conf=0.5, classes=[0])
+
+    # 2. 結果から座標を取り出す
+    # resultsはリスト形式（動画のフレームごと）なので、forで回します
+    for result in results:
+        
+        # 検出されたすべての箱（box）をチェック
+        for box in result.boxes:
+            
+            # xyxy形式（左上x, 左上y, 右下x, 右下y）で座標を取得
+            # テンソル形式なので .tolist() でPythonのリストに変換します
+            coords = box.xyxy[0].tolist()
+            
+            # 小数点が含まれるので整数(int)に変換
+            x1, y1, x2, y2 = map(int, coords)
+            
+            print("--------------------------------------------------")
+            print(f"顔を検出しました！")
+            print(f"左上: ({x1}, {y1})")
+            print(f"右下: ({x2}, {y2})")
+            
+            # 中心座標も計算しておくと、後でカメラを動かすときに便利です
+            center_x = (x1 + x2) // 2
+            center_y = (y1 + y2) // 2
+            print(f"中心: ({center_x}, {center_y})")
+
 except Exception as e:
     print("\n[YOLO実行エラー]")
     print(e)

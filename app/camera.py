@@ -33,6 +33,10 @@ def find_and_open():
     cap.set(cv2.CAP_PROP_FPS, 30)    
     # Load the Haar Cascade classifier
     cascade = cv2.CascadeClassifier(CASCADE_FILE)
+
+    # 初期化（find_and_open内で一回だけやる）
+    mp_face_detection = mp.solutions.face_detection
+    face_detection = mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5)
     
     if cascade.empty():
         print(f"Error: Failed to load cascade classifier at {CASCADE_FILE}")
@@ -94,6 +98,7 @@ def end_camera(cap):
         cap.release()
     cv2.destroyAllWindows()
     print("Face recognition ended.")
+
 
 
 if __name__ == '__main__':

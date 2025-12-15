@@ -32,6 +32,10 @@ sudo apt update
 sudo apt upgrade
 sudo apt install pigpio
 which pigpiod　　（でpigpiodがあるか確認）
-sudo systemctl stop pigpiod
 sudo pigpiod
+```
+
+### 4.環境構築（OpenCV）
+```bash
+pip install opencv-python
 ```

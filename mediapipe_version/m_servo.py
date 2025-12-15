@@ -16,17 +16,15 @@ def move_servo(servo_type, angle, hold_time=0.2):
 
     servo_type.value = angle / 90.0
 
-    time.sleep(hold_time)
-    servo_type.value = None
+    # time.sleep(hold_time)
+    # servo_type.value = None
 
 def convert_angle(servo_type,coordinate):
     if servo_type == servo1:    
         angle = coordinate // 9.142
-        # angle = coordinate // 15
         return max(-90, min(90, angle))
     elif servo_type == servo2:
         angle = coordinate // 6.857
-        # angle = coordinate // 12
         return max(-90, min(90, angle))
 
 def return_center(servo_type, hold_time=0.2):

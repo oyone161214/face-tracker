@@ -1,10 +1,6 @@
 import cv2
+import mediapipe as mp
 
-# Specify which camera to use (0 = default, built-in, or first detected USB camera)
-CAM_ID = 0
-
-# Path to the pre-trained model file for face recognition (adjust for your environment)
-CASCADE_FILE = "/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml"
 
 
 def find_and_open():
@@ -19,7 +15,6 @@ def find_and_open():
         if current_cap.isOpened():
             print(f"✅ Camera {i} opened successfully!")
             cap = current_cap
-            CAM_ID = i
             break
         else:
             current_cap.release() 
@@ -31,66 +26,50 @@ def find_and_open():
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
     cap.set(cv2.CAP_PROP_FPS, 30)    
-    # Load the Haar Cascade classifier
-    cascade = cv2.CascadeClassifier(CASCADE_FILE)
 
-    # 初期化（find_and_open内で一回だけやる）
     mp_face_detection = mp.solutions.face_detection
     face_detection = mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5)
-    
-    if cascade.empty():
-        print(f"Error: Failed to load cascade classifier at {CASCADE_FILE}")
-        cap.release()
-        return
 
     print("Starting face recognition... (Press 'q' to quit)")
     
-    return cap,cascade
+    return cap,face_detection
 
 
-# cap,cascade = find_and_open_camera()
 
-def camera(cap, cascade, debug=False):
-
-    for _ in range(5):
-        cap.grab()
-    
-
-    # Read one frame from the camera
+def camera_mediapipe(cap, face_detection, debug=False):
     ret, frame = cap.read()
-    if not ret:
-        print("Error: Failed to read frame.")
-        raise None
+    if not ret: return None
+
+
+    image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = face_detection.process(image)
     
-    # (x, y)
     center = (frame.shape[1] // 2, frame.shape[0] // 2)
-
-    # Convert the frame to grayscale to speed up processing
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    # Detect faces in the frame
-    faces = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(30, 30))
-
-    # Draw rectangles around detected faces
-
     move = None
 
-    if len(faces) > 0:
-        target_face = max(faces, key=lambda f: f[2] * f[3])
+    if results.detections:
 
-        x, y, w, h = target_face
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        detection = results.detections[0] 
+        bboxC = detection.location_data.relative_bounding_box
+        ih, iw, _ = frame.shape
+        
 
-        face_center = ( x + w //2, y + h // 2)
-
+        x = int(bboxC.xmin * iw)
+        y = int(bboxC.ymin * ih)
+        w = int(bboxC.width * iw)
+        h = int(bboxC.height * ih)
+        
+        face_center = (x + w // 2, y + h // 2)
         move = (center[0] - face_center[0], center[1] - face_center[1])
 
-
-    # Display the result in a window
+        if debug:
+             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     if debug:
-        cv2.imshow('Face Recognition', frame)
+        cv2.imshow('MediaPipe Face', frame)
 
     return move
+
 
 
 def end_camera(cap):
@@ -107,7 +86,7 @@ if __name__ == '__main__':
     if cap is not None:
         try:
             while True:
-                resp = camera(cap, cascade)
+                resp = camera_mediapipe(cap, cascade)
                 
                 if resp is not None:
                     print(f"Moving: {resp}")

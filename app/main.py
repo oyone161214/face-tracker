@@ -15,10 +15,14 @@ def main():
     current_pan = 0.0
     current_tilt = 0.0
 
+
+    PAN_GAIN = 0.05
+    TILT_GAIN = 0.05  
+
     return_center(servo1)
     return_center(servo2)
 
-    DEAD_ZONE = 30
+    DEAD_ZONE = 50
 
     try:
     # (x,y)received from face_track
@@ -49,13 +53,12 @@ def main():
     
     except KeyboardInterrupt:
         pass
+
     
     return_center(servo1)
     return_center(servo2)
     end_camera(cap)
     
-
-
 
 
 if __name__ == "__main__":

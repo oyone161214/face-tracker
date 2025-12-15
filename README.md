@@ -105,3 +105,13 @@ FACE-TRACKER/
 **サーボ:** 米澤
 **機能統合:** シャイン、米澤
 **protopedia記事:** 山本
+
+### 4.インストール方法（YOLO）
+```bash
+psudo apt update
+sudo apt install python3-pip -y
+pip install -U pip
+pip install ultralytics[export]
+sudo reboot
+
+```
